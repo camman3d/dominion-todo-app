@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
+import {X} from "lucide-react";
 
 interface DatePickerProps {
-    onDateChange?: (date: Date) => void;
+    onDateChange: (date: Date | null) => void;
     initialDate?: Date;
+    showRemove: boolean;
 }
 
 const DatePicker: React.FC<DatePickerProps> = ({
                                                    onDateChange,
-                                                   initialDate = new Date()
+                                                   initialDate = new Date(),
+                                                   showRemove,
                                                }) => {
     const [selectedDate, setSelectedDate] = useState<Date>(initialDate);
 
@@ -22,7 +25,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
     const handleDateSelect = (day: number) => {
         const newDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), day);
         setSelectedDate(newDate);
-        onDateChange?.(newDate);
+        onDateChange(newDate);
     };
 
     const handleMonthChange = (increment: number) => {
@@ -89,6 +92,14 @@ const DatePicker: React.FC<DatePickerProps> = ({
                 </div>
             ))}
         </div>
+        {showRemove && <div className="border-t flex py-2 justify-center">
+            <button onClick={() => onDateChange(null)}
+                    className="bg-red-100 hover:bg-red-200 active:bg-red-300 transition px-2 rounded flex items-center space-x-1"
+            >
+                <X size={14} />
+                <span>Remove Date</span>
+            </button>
+        </div>}
     </div>;
 };
 

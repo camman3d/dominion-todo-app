@@ -61,7 +61,7 @@ function DateTag(props: Props) {
                 <div>{formatFriendlyDate(date)}</div> :
                 <div className="text-gray-400">Due Date</div>}
         </button>
-        {pickerOpen && <DatePicker initialDate={date || new Date()} onDateChange={handleChange} />}
+        {pickerOpen && <DatePicker initialDate={date || new Date()} onDateChange={handleChange} showRemove={!!date} />}
     </div>
 }
 

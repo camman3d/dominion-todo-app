@@ -1,4 +1,4 @@
-import {File, ShieldAlert, ShieldCheck} from "lucide-react";
+import {File, ShieldAlert, ShieldCheck, XCircle} from "lucide-react";
 import {useEffect, useState} from "react";
 import windowCloser from "../services/window-closer.ts";
 
@@ -60,6 +60,9 @@ function PriorityTag({priority, onChange}: Props) {
                 <PriorityBtn priority={4} onClick={() => handleChange(4)}/>
                 <PriorityBtn priority={5} onClick={() => handleChange(5)}/>
                 <PriorityBtn priority={6} onClick={() => handleChange(6)}/>
+                <button onClick={() => handleChange(0)} className="bg-gray-100 px-2 rounded text-gray-400 hover:text-gray-500 transition">
+                    <XCircle size={14} />
+                </button>
             </div>
         </div>}
         <PriorityBtn priority={priority} onClick={() => setMenuVisible(!menuVisible)} />
