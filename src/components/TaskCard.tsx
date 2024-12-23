@@ -1,5 +1,5 @@
 import TaskApi, {Task} from "../services/tasks/api.ts";
-import {Check} from "lucide-react";
+import {Check, Pencil, Trash} from "lucide-react";
 import DateTag from "./DateTag.tsx";
 import PriorityTag from "./PriorityTag.tsx";
 import {ChangeEvent, useState} from "react";
@@ -20,7 +20,7 @@ function TaskDescription(props: {description: string, onChange: (d: string) => v
         onChange(e.target.value);
     }
 
-    return <input className="w-full bg-white bg-opacity-0 outline-none" type="text" value={description} onChange={handleChange}/>
+    return <input className="flex-grow bg-white bg-opacity-0 outline-none" type="text" value={description} onChange={handleChange}/>
 }
 
 type Props = {
@@ -28,12 +28,25 @@ type Props = {
 };
 
 function TaskCard({task}: Props) {
+
+    const [editing, setEditing] = useState(false);
+
     const mutation = useMutation({
         mutationFn: TaskApi.update,
         onSuccess: () => {
             queryClient.invalidateQueries({queryKey: ['todos']});
         }
     });
+    const deleteMutation = useMutation({
+        mutationFn: TaskApi.delete,
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ['todos']});
+        }
+    });
+
+    function deleteTask() {
+        deleteMutation.mutate(task.id);
+    }
 
     function handleCheck(e: ChangeEvent<HTMLInputElement>) {
         if (e.target.checked) {
@@ -73,22 +86,35 @@ function TaskCard({task}: Props) {
         <div className="flex">
             <div className="mr-2">
                 <label className="relative inline-block w-6 h-6 group cursor-pointer">
-                    <input type="checkbox"
+                    <input type="checkbox" checked={!!task.date_completed}
                            onChange={handleCheck}
                            className="peer appearance-none border border-gray-400 w-6 h-6 rounded-full checked:border-aquamarine-600 checked:bg-gradient-to-br checked:from-shakespeare-400 checked:to-aquamarine-400 shadow" />
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 transition group-hover:opacity-100 text-gray-400 peer-checked:text-white peer-checked:opacity-100">
-                        <Check className="scale-75"/>
+                        <Check size={16} />
                     </div>
                 </label>
             </div>
             <TaskDescription description={task.description} onChange={handleDescriptionChange} />
+            <div className="ml-1 flex space-x-1">
+                {editing && <button onClick={deleteTask}
+                                    className="text-white bg-red-500 rounded hover:bg-red-400 active:bg-red-600 transition px-2 py-2"
+                >
+                    <Trash size={14} />
+                </button>}
+                <button onClick={() => setEditing(!editing)}
+                        className="text-gray-400 hover:text-gray-500 transition border border-gray-400 border-opacity-0 hover:border-opacity-100 px-2 py-2 rounded bg-gray-200 bg-opacity-0 active:bg-opacity-100"
+                >
+                    {editing ? <Check size={14}/> : <Pencil size={14} />}
+                </button>
+            </div>
         </div>
-        <div className="flex space-x-3">
-            {task.date_due && <DateTag date={task.date_due} onChange={handleDateChange} />}
-            {(task.priority || 0) > 0 && <PriorityTag priority={task.priority!} onChange={handlePriorityChange} />}
-            {task.location && <LocationTag location={task.location} onChange={handleLocationChange} />}
+        <div className="flex space-x-3 mb-1">
+            {(task.date_due || editing) && <DateTag date={task.date_due} onChange={handleDateChange}/>}
+            {(task.priority > 0 || editing) && <PriorityTag priority={task.priority} onChange={handlePriorityChange}/>}
+            {task.location && !editing && <LocationTag location={task.location} onChange={handleLocationChange} />}
         </div>
-        {task.categories.length > 0 && <CategoriesTag categories={task.categories} onChange={handleCategoriesChange} />}
+        {editing && <LocationTag location={task.location} onChange={handleLocationChange} />}
+        {(task.categories.length > 0 || editing) && <CategoriesTag categories={task.categories} onChange={handleCategoriesChange} alwaysShowInput={editing} />}
     </div>
 }
 

@@ -45,18 +45,22 @@ const auth = {
 
     async signUp(email: string, password: string): Promise<AuthResponse> {
         const url = import.meta.env.VITE_API_HOST + import.meta.env.VITE_API_BASE + '/users';
-        const response = await fetch(url, {
-            method: 'POST',
-            body: JSON.stringify({email, password}),
-            headers: {
-                'Content-Type': 'application/json',
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                body: JSON.stringify({email, password}),
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            const result = await response.json();
+            if (!response.ok) {
+                return {error: result.detail};
             }
-        });
-        const result = await response.json();
-        if (!response.ok) {
-            return {error: result.detail};
+            return {data: result};
+        } catch (e: unknown) {
+            return {error: (e as Error).message}
         }
-        return {data: result};
     },
 
     async signIn(email: string, password: string): Promise<AuthResponse> {
@@ -64,26 +68,30 @@ const auth = {
         const body = new FormData();
         body.set('username', email);
         body.set('password', password);
-        const response = await fetch(url, {
-            method: 'POST',
-            body,
-        });
-        const result = await response.json();
-        if (!response.ok) {
-            return {error: result.detail};
-        }
-        if (result.token_type !== 'bearer') {
-            console.error('Unsupported token type: ' + result.token_type);
-            return {error: 'Could not log in'};
-        }
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                body,
+            });
+            const result = await response.json();
+            if (!response.ok) {
+                return {error: result.detail};
+            }
+            if (result.token_type !== 'bearer') {
+                console.error('Unsupported token type: ' + result.token_type);
+                return {error: 'Could not log in'};
+            }
 
-        // Save to session
-        const token = result.access_token;
-        sessionStorage.setItem('session', token);
-        const user = parseToken(token);
-        if (!user)
-            return {error: 'Could not log in'};
-        return {data: result};
+            // Save to session
+            const token = result.access_token;
+            sessionStorage.setItem('session', token);
+            const user = parseToken(token);
+            if (!user)
+                return {error: 'Could not log in'};
+            return {data: result};
+        } catch (e: unknown) {
+            return {error: (e as Error).message}
+        }
     },
 
     signOut() {

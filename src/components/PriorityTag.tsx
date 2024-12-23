@@ -22,11 +22,11 @@ function PriorityBtn({priority, onClick}: BtnProps) {
     const color = PriorityColors[priority];
 
     return <button onClick={onClick}
-                   className={'flex space-x-1 text-sm items-center rounded pr-2 ' + color}>
-        {priority <= 3 && <ShieldAlert className="scale-[60%]"/>}
-        {priority >= 4 && priority <= 5 && <ShieldCheck className="scale-[60%]"/>}
-        {priority >= 6 && <File className="scale-[60%]"/>}
-        {PriorityLabels[priority]}
+                   className={'flex space-x-1 text-sm items-center rounded px-2 ' + color}>
+        {priority <= 3 && <ShieldAlert size={14}/>}
+        {priority >= 4 && priority <= 5 && <ShieldCheck size={14}/>}
+        {priority >= 6 && <File size={14}/>}
+        <div>{PriorityLabels[priority]}</div>
     </button>
 }
 

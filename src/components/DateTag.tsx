@@ -56,7 +56,7 @@ function DateTag(props: Props) {
     return <div className="relative" onClick={e => e.stopPropagation()}>
         <button onClick={() => setPickerOpen(!pickerOpen)}
                 className={'flex space-x-1 text-sm items-center ' + color}>
-            <Calendar className="scale-[60%]" />
+            <Calendar size={14} />
             {date ?
                 <div>{formatFriendlyDate(date)}</div> :
                 <div className="text-gray-400">Due Date</div>}

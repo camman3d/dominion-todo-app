@@ -2,8 +2,8 @@ import {authHeader} from "../auth/auth.ts";
 
 export interface TaskBase {
     description: string;
-    location: string | null,
-    priority: number | null,
+    location: string,
+    priority: number,
     date_due: Date | string | null;
     date_completed: Date | string | null;
     status: string | null;
@@ -15,8 +15,9 @@ export type Task = TaskBase & {id: number};
 const TaskBaseUrl = import.meta.env.VITE_API_HOST + import.meta.env.VITE_API_BASE + '/tasks';
 
 const TaskApi = {
-    current: async (): Promise<Task[]> => {
-        const response = await fetch(TaskBaseUrl, {
+    current: async (sort: string, filter: string): Promise<Task[]> => {
+        const url = TaskBaseUrl + '?' + new URLSearchParams([['sort', sort], ['filter_name', filter]]).toString();
+        const response = await fetch(url, {
             method: 'GET',
             headers: {
                 ...authHeader(),
@@ -43,6 +44,13 @@ const TaskApi = {
                 'Content-Type': 'application/json',
                 ...authHeader(),
             }
+        });
+        return await response.json();
+    },
+    delete: async (taskId: number): Promise<void> => {
+        const response = await fetch(TaskBaseUrl + '/' + taskId, {
+            method: 'DELETE',
+            headers: {...authHeader()}
         });
         return await response.json();
     }

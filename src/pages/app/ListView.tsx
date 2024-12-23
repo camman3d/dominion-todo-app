@@ -1,9 +1,11 @@
 import {useQuery} from "@tanstack/react-query";
 import TaskApi, {Task} from "../../services/tasks/api.ts";
 import TaskCard from "../../components/TaskCard.tsx";
+import {useApp} from "./state/AppStateContext.tsx";
 
 function ListView() {
-    const tasks = useQuery({queryKey: ['todos'], queryFn: TaskApi.current});
+    const {state} = useApp();
+    const tasks = useQuery({queryKey: ['todos', state.sort, state.filter], queryFn: () => TaskApi.current(state.sort, state.filter)});
 
     if (tasks.isLoading)
         return <div>Loading tasks...</div>;

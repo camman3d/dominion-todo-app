@@ -21,7 +21,7 @@ function LocationTag(props: Props) {
     }
 
     return <div className="flex space-x-1 text-sm items-center text-gray-400">
-        <MapPin className="scale-[60%]"/>
+        <MapPin size={14}/>
         <input type="text" placeholder="Location"
                value={location} onChange={handleChange}
                className="w-full bg-white bg-opacity-0 outline-none" />
