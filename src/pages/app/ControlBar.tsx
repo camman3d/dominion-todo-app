@@ -127,12 +127,12 @@ function ControlBar() {
                 <ControlMenuButton active={state.view === 'groups'} onClick={() => setView('groups')}>
                     Groups
                 </ControlMenuButton>
-                <ControlMenuButton active={state.view === 'board'} onClick={() => setView('board')}>
-                    Board
-                </ControlMenuButton>
-                <ControlMenuButton active={state.view === 'calendar'} onClick={() => setView('calendar')}>
-                    Calendar
-                </ControlMenuButton>
+                {/*<ControlMenuButton active={state.view === 'board'} onClick={() => setView('board')}>*/}
+                {/*    Board*/}
+                {/*</ControlMenuButton>*/}
+                {/*<ControlMenuButton active={state.view === 'calendar'} onClick={() => setView('calendar')}>*/}
+                {/*    Calendar*/}
+                {/*</ControlMenuButton>*/}
             </ControlButton>
         </div>
     </div>

@@ -2,7 +2,7 @@ import TaskApi, {Task} from "../services/tasks/api.ts";
 import {Check, Pencil, Trash} from "lucide-react";
 import DateTag from "./DateTag.tsx";
 import PriorityTag from "./PriorityTag.tsx";
-import {ChangeEvent, useState} from "react";
+import {ChangeEvent, useEffect, useRef, useState} from "react";
 import {useMutation} from "@tanstack/react-query";
 import queryClient from "../services/queryClient.ts";
 import LocationTag from "./LocationTag.tsx";
@@ -13,14 +13,29 @@ import CategoriesTag from "./CategoriesTag.tsx";
 
 function TaskDescription(props: {description: string, onChange: (d: string) => void}) {
     const [description, setDescription] = useState(props.description);
+    const ref = useRef<HTMLTextAreaElement>(null);
     const onChange = useDebounce(props.onChange, 500);
 
-    function handleChange(e: ChangeEvent<HTMLInputElement>) {
+    useEffect(() => {
+        if (ref.current) {
+            ref.current.style.height = '5px';
+            ref.current.style.height = ref.current.scrollHeight + 'px';
+        }
+    }, [description]);
+
+    function handleChange(e: ChangeEvent<HTMLTextAreaElement>) {
         setDescription(e.target.value);
         onChange(e.target.value);
     }
 
-    return <input className="flex-grow bg-white bg-opacity-0 outline-none" type="text" value={description} onChange={handleChange}/>
+    // return <input className="flex-grow bg-white bg-opacity-0 outline-none" type="text" value={description} onChange={handleChange}/>
+    return <div className="flex-grow">
+        {/*<input className="bg-white bg-opacity-0 w-full outline-none whitespace-pre-wrap" type="text" value={description} onChange={handleChange}/>*/}
+        <textarea ref={ref}
+                  value={description} onChange={handleChange}
+                  className="bg-white bg-opacity-0 text-sm resize-none w-full break-words overflow-hidden outline-none">
+        </textarea>
+    </div>
 }
 
 type Props = {
@@ -83,7 +98,7 @@ function TaskCard({task}: Props) {
     }
 
     return <div className="border rounded-lg bg-white bg-opacity-85 px-5 py-5 shadow-lg">
-        <div className="flex">
+        <div className="flex w-full">
             <div className="mr-2">
                 <label className="relative inline-block w-6 h-6 group cursor-pointer">
                     <input type="checkbox" checked={!!task.date_completed}
@@ -111,9 +126,8 @@ function TaskCard({task}: Props) {
         <div className="flex space-x-3 mb-1">
             {(task.date_due || editing) && <DateTag date={task.date_due} onChange={handleDateChange}/>}
             {(task.priority > 0 || editing) && <PriorityTag priority={task.priority} onChange={handlePriorityChange}/>}
-            {task.location && !editing && <LocationTag location={task.location} onChange={handleLocationChange} />}
         </div>
-        {editing && <LocationTag location={task.location} onChange={handleLocationChange} />}
+        {(task.location || editing) && <LocationTag location={task.location} onChange={handleLocationChange} />}
         {(task.categories.length > 0 || editing) && <CategoriesTag categories={task.categories} onChange={handleCategoriesChange} alwaysShowInput={editing} />}
     </div>
 }
