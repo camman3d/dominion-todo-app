@@ -1,5 +1,6 @@
 import {User} from "./AuthContext.tsx";
 
+const AuthStorage = localStorage;
 
 interface Jwt {
     sub: string,
@@ -32,12 +33,12 @@ function parseToken(token: string): User | null {
 }
 
 export function authHeader() {
-    return {'Authorization': `Bearer ${sessionStorage.getItem('session')}`,}
+    return {'Authorization': `Bearer ${AuthStorage.getItem('session')}`,}
 }
 
 const auth = {
     getSession(): User | null {
-        const token = sessionStorage.getItem('session');
+        const token = AuthStorage.getItem('session');
         return parseToken(token ?? '');
     },
 
@@ -84,7 +85,7 @@ const auth = {
 
             // Save to session
             const token = result.access_token;
-            sessionStorage.setItem('session', token);
+            AuthStorage.setItem('session', token);
             const user = parseToken(token);
             if (!user)
                 return {error: 'Could not log in'};
@@ -95,7 +96,7 @@ const auth = {
     },
 
     signOut() {
-        sessionStorage.removeItem('session');
+        AuthStorage.removeItem('session');
     }
 }
 export default auth;

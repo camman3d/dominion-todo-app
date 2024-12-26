@@ -1,5 +1,5 @@
 import {FormEvent, useEffect, useRef, useState} from "react";
-import {Check, X} from "lucide-react";
+import {Check, CircleHelp, X} from "lucide-react";
 import TaskParser from "../services/tasks/parser.tsx";
 import {useMutation} from "@tanstack/react-query";
 import TaskApi from "../services/tasks/api.ts";
@@ -8,6 +8,8 @@ import DateTag from "./DateTag.tsx";
 import PriorityTag from "./PriorityTag.tsx";
 import LocationTag from "./LocationTag.tsx";
 import CategoriesTag from "./CategoriesTag.tsx";
+import {Popover, PopoverButton, PopoverPanel} from "@headlessui/react";
+import {AnimatePresence, motion} from "framer-motion";
 
 type Props = {
     onClose?: () => void;
@@ -68,7 +70,7 @@ function TaskForm({onClose, autoFocus}: Props) {
         onClose!();
     }
 
-    return <div>
+    return <div className="relative">
         <div className="bg-white bg-opacity-85 rounded-lg shadow-lg">
             <form onSubmit={handleSubmit}>
                 <div className="px-5 py-5">
@@ -102,6 +104,68 @@ function TaskForm({onClose, autoFocus}: Props) {
                     </button>
                 </div>
             </div>
+        </div>
+        <div className="absolute top-0 right-full pr-3 pt-5">
+            <Popover>
+                {({ open }) => <>
+                    <PopoverButton className="text-white opacity-70 hover:opacity-90 transition">
+                        <CircleHelp />
+                    </PopoverButton>
+                    <AnimatePresence>
+                        {open && (
+                            <PopoverPanel
+                                static
+                                as={motion.div}
+                                initial={{opacity: 0, scale: 0.95}}
+                                animate={{opacity: 1, scale: 1}}
+                                exit={{opacity: 0, scale: 0.95}}
+                                anchor="top start"
+                                className="flex origin-top flex-col space-y-2 bg-white bg-opacity-85 rounded-md shadow-md backdrop-blur-sm w-96 px-3 py-3"
+                            >
+                                <div>
+                                    You can set due date, location, priority, and categories directly in your task
+                                    description. Simply type and the corresponding fields will be automatically updated!
+                                </div>
+                                <div>
+                                    <div className="font-medium">Due Date</div>
+                                    Add date as
+                                    <code className="text-sm bg-shakespeare-200 px-1 rounded mx-1">12/25</code>
+                                    or
+                                    <code className="text-sm bg-shakespeare-200 px-1 rounded ml-1">December 25</code>
+                                </div>
+
+                                <div>
+                                    <div className="font-medium">Priority</div>
+                                    Use one of
+                                    <div className="flex flex-wrap">
+                                        {['critical', 'urgent', 'high', 'mid', 'low', 'note'].map(p =>
+                                            <code key={p}
+                                                  className="text-sm bg-shakespeare-200 px-1 rounded mr-1 mb-1">!{p}</code>)
+                                        }
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div className="font-medium">Location</div>
+                                    Add
+                                    <code className="text-sm bg-shakespeare-200 px-1 rounded mx-1">@location</code>
+                                    (e.g.
+                                    <code className="text-sm bg-shakespeare-200 px-1 rounded mx-1">@home</code>
+                                    )
+                                </div>
+
+                                <div>
+                                    <div className="font-medium">Categories</div>
+                                    Add <code
+                                    className="text-sm bg-shakespeare-200 px-1 rounded">#category1</code>, <code
+                                    className="text-sm bg-shakespeare-200 px-1 rounded">#category2</code>, etc.
+                                </div>
+
+                            </PopoverPanel>
+                        )}
+                    </AnimatePresence>
+                </>}
+            </Popover>
         </div>
     </div>
 }

@@ -3,6 +3,7 @@ import {Popover, PopoverButton, PopoverPanel} from "@headlessui/react";
 import {ChevronDown} from "lucide-react";
 import {AnimatePresence, motion} from "framer-motion";
 import {useAuth} from "../services/auth/AuthContext.tsx";
+import Logo from "../assets/LogoWhite.png";
 
 function Navbar() {
     const {authState, signOut} = useAuth();
@@ -10,7 +11,9 @@ function Navbar() {
 
     return <nav className="container mx-auto px-3 py-10 text-gray-100">
         <div className="flex items-center">
-            <div className="font-bold text-lg tracking-wide">Dominion AI</div>
+            <div>
+                <img src={Logo} alt="Dominion" className="h-10"/>
+            </div>
             <div className="flex-grow"/>
             <div className="flex space-x-10 items-center">
                 <div>

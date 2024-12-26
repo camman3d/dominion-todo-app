@@ -1,11 +1,12 @@
-import {ReactNode, useState} from "react";
+import {ReactNode} from "react";
 import {AppStateContext, AppViewType} from "./AppStateContext.tsx";
+import usePersistentState from "../../../services/persistent-state.ts";
 
 
 export default function AppStateProvider({children}: {children: ReactNode}) {
-    const [sort, setSort] = useState('date_due');
-    const [filter, setFilter] = useState('');
-    const [view, setView] = useState<AppViewType>('list');
+    const [sort, setSort] = usePersistentState('state:sort', 'date_due');
+    const [filter, setFilter] = usePersistentState('state:filter', '');
+    const [view, setView] = usePersistentState<AppViewType>('state:view', 'list');
 
     const state = {sort, filter, view};
 
