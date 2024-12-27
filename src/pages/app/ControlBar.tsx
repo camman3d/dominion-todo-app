@@ -21,7 +21,7 @@ function ControlButton({icon, name, children}: {icon: ReactNode, name: string, c
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.95 }}
                         anchor="bottom"
-                        className="flex origin-top flex-col bg-white bg-opacity-85 rounded-md shadow-md divide-y divide-aquamarine-500 min-w-52 backdrop-blur-sm"
+                        className="flex origin-top flex-col bg-white bg-opacity-85 rounded-md shadow-md divide-y divide-aquamarine-500 min-w-52 backdrop-blur-sm border-2 md:border-0 border-gray-500 border-opacity-25"
                     >
                         {children}
                     </PopoverPanel>

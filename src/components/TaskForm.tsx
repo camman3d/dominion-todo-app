@@ -83,11 +83,13 @@ function TaskForm({onClose, autoFocus}: Props) {
 
             <div className="border-t border-shakespeare-300 px-5 py-5 flex">
                 <div>
-                    <div className="flex space-x-3">
+                    <div className="flex flex-col space-y-1 md:space-y-0 md:flex-row md:space-x-3">
                         <DateTag date={dueDate} onChange={setDueDate} />
                         <PriorityTag priority={priority} onChange={setPriority} />
                     </div>
-                    <LocationTag location={location} onChange={setLocation} />
+                    <div className="my-1">
+                        <LocationTag location={location} onChange={setLocation} />
+                    </div>
                     <CategoriesTag categories={categories} onChange={setCategories} alwaysShowInput />
                 </div>
                 <div className="flex-grow"/>
@@ -120,7 +122,7 @@ function TaskForm({onClose, autoFocus}: Props) {
                                 animate={{opacity: 1, scale: 1}}
                                 exit={{opacity: 0, scale: 0.95}}
                                 anchor="top start"
-                                className="flex origin-top flex-col space-y-2 bg-white bg-opacity-85 rounded-md shadow-md backdrop-blur-sm w-96 px-3 py-3"
+                                className="flex origin-top flex-col space-y-2 bg-white bg-opacity-85 rounded-md shadow-md backdrop-blur-sm w-80 md:w-96 px-3 py-3"
                             >
                                 <div>
                                     You can set due date, location, priority, and categories directly in your task

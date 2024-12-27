@@ -97,7 +97,7 @@ function TaskCard({task}: Props) {
         mutation.mutate(task);
     }
 
-    return <div className="border rounded-lg bg-white bg-opacity-85 px-5 py-5 shadow-lg">
+    return <div className="border rounded-lg bg-white bg-opacity-85 px-4 md:px-5 py-3 md:py-5 shadow-lg">
         <div className="flex w-full">
             <div className="mr-2">
                 <label className="relative inline-block w-6 h-6 group cursor-pointer">
@@ -123,12 +123,17 @@ function TaskCard({task}: Props) {
                 </button>
             </div>
         </div>
-        <div className="flex space-x-3 mb-1">
+        <div className="flex flex-col space-y-1 md:space-y-0 md:flex-row md:space-x-3">
             {(task.date_due || editing) && <DateTag date={task.date_due} onChange={handleDateChange}/>}
             {(task.priority > 0 || editing) && <PriorityTag priority={task.priority} onChange={handlePriorityChange}/>}
         </div>
-        {(task.location || editing) && <LocationTag location={task.location} onChange={handleLocationChange} />}
-        {(task.categories.length > 0 || editing) && <CategoriesTag categories={task.categories} onChange={handleCategoriesChange} alwaysShowInput={editing} />}
+
+        {(task.location || editing) && <div className="my-1">
+            <LocationTag location={task.location} onChange={handleLocationChange} />
+        </div>}
+        {(task.categories.length > 0 || editing) && <div className="mt-1">
+            <CategoriesTag categories={task.categories} onChange={handleCategoriesChange} alwaysShowInput={editing} />
+        </div>}
     </div>
 }
 

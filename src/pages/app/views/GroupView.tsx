@@ -96,7 +96,7 @@ function GroupView() {
                 <option className="text-gray-800 bg-white bg-opacity-0" value="date_due">Due Date</option>
             </select>
         </div>
-        <div className="flex justify-center space-x-2">
+        <div className="flex flex-col md:flex-row md:flex-wrap items-center md:items-start justify-center space-y-8 md:space-y-0 md:space-x-2 py-8 md:pb-2">
             {groupNames.map(name => <div key={name} className="w-80">
                 <div className="text-center text-lg font-medium text-shakespeare-800">{name}</div>
                 <div className="flex flex-col space-y-2">
