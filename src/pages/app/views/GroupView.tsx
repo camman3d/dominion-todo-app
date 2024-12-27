@@ -3,7 +3,6 @@ import {useQuery} from "@tanstack/react-query";
 import TaskApi, {Task} from "../../../services/tasks/api.ts";
 import {useApp} from "../state/AppStateContext.tsx";
 import TaskCard from "../../../components/TaskCard.tsx";
-import AddTask from "../../../components/AddTask.tsx";
 
 type GroupResult = [Record<string, Task[]>, string[]]
 
@@ -97,14 +96,11 @@ function GroupView() {
                 <option className="text-gray-800 bg-white bg-opacity-0" value="date_due">Due Date</option>
             </select>
         </div>
-        <div className="w-2/3 lg:w-1/3 mx-auto py-5">
-            <AddTask/>
-        </div>
         <div className="flex justify-center space-x-2">
             {groupNames.map(name => <div key={name} className="w-80">
                 <div className="text-center text-lg font-medium text-shakespeare-800">{name}</div>
                 <div className="flex flex-col space-y-2">
-                    {groups[name].map(task => <TaskCard task={task} key={task.id} />)}
+                    {groups[name].map(task => <TaskCard task={task} key={task.id}/>)}
                 </div>
 
             </div>)}
