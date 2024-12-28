@@ -22,7 +22,7 @@ function TaskDescription(props: {description: string, onChange: (d: string) => v
     useEffect(() => {
         if (ref.current) {
             ref.current.style.height = '5px';
-            ref.current.style.height = ref.current.scrollHeight + 'px';
+            ref.current.style.height = Math.max(20, ref.current.scrollHeight) + 'px';
         }
     }, [description]);
 
