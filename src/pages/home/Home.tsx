@@ -5,6 +5,7 @@ function Home() {
         <div>
             Hello world
         </div>
+        <div>Helen is a big girl</div>
 
     </div>
 }

@@ -15,6 +15,19 @@ export type Task = TaskBase & {id: number};
 const TaskBaseUrl = import.meta.env.VITE_API_HOST + import.meta.env.VITE_API_BASE + '/tasks';
 
 const TaskApi = {
+    get: async (id: number): Promise<Task> => {
+        if (!id)
+            return {id: 0, description: '', location: '', priority: 0, date_due: null, date_completed: null, status: null, categories: []};
+
+        const url = TaskBaseUrl + '/' + id;
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                ...authHeader(),
+            }
+        });
+        return await response.json();
+    },
     current: async (sort: string, filter: string): Promise<Task[]> => {
         const url = TaskBaseUrl + '?' + new URLSearchParams([['sort', sort], ['filter_name', filter]]).toString();
         const response = await fetch(url, {

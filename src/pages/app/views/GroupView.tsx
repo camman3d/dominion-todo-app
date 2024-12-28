@@ -15,7 +15,7 @@ function groupBy(tasks: Task[], group: string): GroupResult {
 
     if (group === 'category') {
         tasks.forEach(task => {
-            const categories = task.categories.length ? task.categories : ['Other'];
+            const categories = task.categories.length ? task.categories : ['None'];
 
             categories.forEach(category => {
                 if (!groups[category])

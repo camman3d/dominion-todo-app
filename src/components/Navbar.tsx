@@ -4,10 +4,19 @@ import {Link, useLocation} from "react-router-dom";
 // import {AnimatePresence, motion} from "framer-motion";
 import {useAuth} from "../services/auth/AuthContext.tsx";
 import Logo from "../assets/LogoWhite.png";
+import {useQuery} from "@tanstack/react-query";
+import creditApi from "../services/credit-api.ts";
+import AISpark from "../assets/AISparkWhite.svg";
 
 function Navbar() {
     const {authState, signOut} = useAuth();
     const location = useLocation();
+    const creditBalance = useQuery({queryKey: ['credits', 'balance'], queryFn: async () => {
+            if (!authState.user) return null;
+            const balanceObj = await creditApi.balance();
+            return balanceObj.credit_balance;
+        }
+    });
 
     return <nav className="container mx-auto px-3 py-10 text-gray-100">
         <div className="flex items-center">
@@ -51,6 +60,11 @@ function Navbar() {
                 {/*    </>}*/}
                 {/*</Popover>*/}
 
+                {authState.user && creditBalance.status === 'success' && creditBalance.data !== null &&
+                    <div className="whitespace-nowrap flex-shrink-0">
+                        <img src={AISpark} alt="Credits" className="w-4" />{creditBalance.data}
+                    </div>
+                }
                 {authState.user && !location.pathname.startsWith('/app') &&
                     <Link to="/app" className="bg-white bg-opacity-85 text-gray-600 rounded-lg px-4 py-2 hover:bg-opacity-95 transition">
                         Access App

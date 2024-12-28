@@ -1,5 +1,5 @@
 import {ReactNode} from "react";
-import {AppStateContext, AppViewType} from "./AppStateContext.tsx";
+import {AppState, AppStateContext, AppViewType} from "./AppStateContext.tsx";
 import usePersistentState from "../../../services/persistent-state.ts";
 
 
@@ -8,7 +8,7 @@ export default function AppStateProvider({children}: {children: ReactNode}) {
     const [filter, setFilter] = usePersistentState('state:filter', '');
     const [view, setView] = usePersistentState<AppViewType>('state:view', 'list');
 
-    const state = {sort, filter, view};
+    const state: AppState = {sort, filter, view};
 
     return <AppStateContext.Provider value={{state, setSort, setFilter, setView}}>
         {children}
